@@ -9,14 +9,17 @@ This project shows how to manipulate a database table in MySQL from an AWS Lambd
 ```
 aws rds create-db-instance \
     --db-instance-identifier LambdaMySQLTest \
-    --db-instance-class db.r3.large \
-    --engine MySQL \
-    --port 3006 \
+    --db-instance-class db.t3.micro \
+    --engine mysql \
+    --port 3306 \
+    --engine-version 5.7.44 \
     --allocated-storage 5 \
     --db-name ExampleDB \
     --master-username master \
     --master-user-password master123 \
-    --backup-retention-period 3 
+    --db-subnet-group-name default-vpc-01f1079fb7214867a \
+    --region us-east-1
+
 ```
 +
 . Create inbound role for the security group:
@@ -29,7 +32,7 @@ aws rds describe-db-instances | jq ".DBInstances[].VpcSecurityGroups[].VpcSecuri
 .. Add inbound role:
 +
 ```
-aws ec2 authorize-security-group-ingress --group-id <group-id> --protocol all --port 3006 --cidr 0.0.0.0/0
+aws ec2 authorize-security-group-ingress --group-id <group-id> --protocol all --port 3306 --cidr 0.0.0.0/0
 ```
 +
 . Get instance id:
